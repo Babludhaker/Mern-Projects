@@ -1,0 +1,69 @@
+import { FaPlay, FaCheck, FaTrash } from "react-icons/fa";
+
+export default function QueueDisplay({ queue, onUpdateStatus, onRemove }) {
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "waiting":
+        return "var(--warning)";
+      case "serving":
+        return "var(--success)";
+
+      case "completed":
+        return "var(--info)";
+
+      default:
+        return "var(--text)";
+    }
+  };
+  return (
+    <div className="queue-display">
+      <h2>Queue Display</h2>
+
+      {queue.length != 0 ? (
+        <div className="queue-list">
+          {queue.map((customer) => (
+            <div className="queue-item" key={customer.id}>
+              <div className="customer-info">
+                <h3>{customer.name}</h3>
+                <p>{customer.service}</p>
+                <span
+                  className="status"
+                  style={{ color: getStatusColor(customer.status) }}
+                >
+                  {customer.status}
+                </span>
+              </div>
+              <div className="actions">
+                {customer.status === "waiting" && (
+                  <button
+                    className="serve-btn"
+                    onClick={() => onUpdateStatus(customer.id, "serving")}
+                  >
+                    Serve
+                  </button>
+                )}
+                {customer.status === "serving" && (
+                  <button
+                    className="complete-btn"
+                    onClick={() => onUpdateStatus(customer.id, "completed")}
+                  >
+                    Complete
+                  </button>
+                )}
+
+                <button
+                  className="remove-btn"
+                  onClick={() => onRemove(customer.id)}
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No Customer Data Exists</p>
+      )}
+    </div>
+  );
+}

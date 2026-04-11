@@ -2,10 +2,15 @@ import BasicProps from "./components/BasicProps";
 import ChildrenProps from "./components/ChildrenProps";
 import ComplexProps from "./components/ComplexProps";
 import RefProps from "./components/RefProps";
-import ThemeToggler from "./components/ThemeToggler";
+import ThemeToggler, {
+  ThemeProvider,
+  ThemeToggleButton,
+  useTheme,
+} from "./components/ThemeToggler";
 import "./index.css";
 
-function Navigation({ isDark }) {
+function Navigation() {
+  const { isDark } = useTheme();
   const sections = [
     { id: "Basic", label: "Basic-Props", icon: "🧱" },
     { id: "Children", label: "Children-Props", icon: "🔗" },
@@ -28,16 +33,19 @@ function Navigation({ isDark }) {
               </span>
             </button>
           ))}
+
+          <ThemeToggleButton />
         </div>
       </div>
     </nav>
   );
 }
 
-function AppContent({ isDark }) {
+function AppContent() {
+  const { isDark } = useTheme();
   return (
     <div className={`min-h-screen bg-gray-800`}>
-      <Navigation isDark={isDark} />
+      <Navigation />
 
       <div className={`container mx-auto px-4 py-8`}>
         <header
@@ -73,7 +81,6 @@ function AppContent({ isDark }) {
   );
 }
 export default function App() {
-  const isDark = true;
   return (
     <>
       {/* <BasicProps />
@@ -81,7 +88,9 @@ export default function App() {
       <ComplexProps />
       <RefProps />
       <ThemeToggler /> */}
-      <AppContent isDark={isDark} />
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
     </>
   );
 }
